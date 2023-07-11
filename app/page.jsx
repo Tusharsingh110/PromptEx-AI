@@ -10,7 +10,7 @@ const Home = () => {
 
 
        <p className="desc text-center">
-        Promptopia is an Open-Source AI prompt sharing platform to help developers maximize their productivity and effeciency.
+        Prompt-Ex-AI is an Open-Source AI prompt sharing platform to help developers maximize their productivity and effeciency.
        </p>
 
 
