@@ -6,7 +6,9 @@ import { useState, useEffect } from 'react'
 import PromptCard from './PromptCard'
 
 
-const PromptCardList = ({ data, handleTagCLick }) => {
+
+
+const PromptCardList = ({ data, handleTagClick }) => {
   return (
     <div className="mt-16 prompt_layout">
       {
@@ -14,7 +16,7 @@ const PromptCardList = ({ data, handleTagCLick }) => {
         <PromptCard
           key={post._id}
           post={post}
-          handleTagCLick={handleTagCLick}
+          handleTagClick={handleTagClick}
         />
       ))
       }
@@ -25,25 +27,46 @@ const PromptCardList = ({ data, handleTagCLick }) => {
 
 const Feed = () => {
 
+  
 
   const [searchText, setSearchText] = useState("");
+  // to get all posts
   const [posts, setPosts] = useState([]);
-
+  const [searchedResults,setSearchedResults] = useState([])
 
   const handleSearchChange = (e) => {
-
+    setSearchText(e.target.value);
+    const searchResults = filterPrompts(e.target.value);
+    setSearchedResults(searchResults)
   }
+    const fetchPosts = async () => {
+    const response = await fetch('/api/prompt');
+    const data = await response.json();
+    // console.log("hello1",data);
+    setPosts(data);
+  };
 
   useEffect(()=> {
-    const fetchPosts = async () => {
-      const response = await fetch('/api/prompt');
-      const data = await response.json();
-      // console.log("hello1",data);
-      setPosts(data);
-    }
-
     fetchPosts();
   },[])
+
+  const filterPrompts = (searchText) => {
+    // i flag is for case sensitive search
+    const regex = new RegExp(searchText, "i");
+    return posts.filter(
+      (item) => 
+        regex.test(item.creator.username) ||
+        regex.test(item.prompt) ||
+        regex.test(item.tag)
+    );
+  };
+
+  const handleTagClick = (tagName) => { 
+    // alert("clicked");
+    setSearchText(tagName);
+    const searchResults = filterPrompts(tagName);
+    setSearchedResults(searchResults);
+  }
 
   return (
     <section className='feed'>
@@ -60,10 +83,17 @@ const Feed = () => {
         required
         />
       </form>
-      <PromptCardList
+
+      {searchText ? (
+        <PromptCardList 
+          data={searchedResults}
+          handleTagClick={handleTagClick}
+        />
+      )
+      : (<PromptCardList
         data={posts}
-        handleTagCLick={()=>{}}
-      />
+        handleTagClick={handleTagClick}
+      />)}
 
     </section>
   )
