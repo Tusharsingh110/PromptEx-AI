@@ -36,7 +36,6 @@ const Feed = () => {
   const [searchedResults,setSearchedResults] = useState([])
   // timeout for debouncing search
   const [searchTimeout,setSearchTimeout] = useState(null)
-  console.log(posts)
   // fetched posts
   const fetchPosts = async () => {
     const response = await fetch('/api/prompt');
@@ -49,6 +48,7 @@ const Feed = () => {
   useEffect(()=> {
     fetchPosts();
   },[])
+  console.log('posts', posts.length)
 
   //to set what is needed to be searched and returning filtered prompts
   const handleSearchChange = (e) => {
