@@ -36,7 +36,7 @@ const Feed = () => {
   const [searchedResults,setSearchedResults] = useState([])
   // timeout for debouncing search
   const [searchTimeout,setSearchTimeout] = useState(null)
-
+  console.log(posts)
   // fetched posts
   const fetchPosts = async () => {
     const response = await fetch('/api/prompt');
